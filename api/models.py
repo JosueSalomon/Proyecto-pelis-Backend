@@ -1,5 +1,5 @@
 from django.db import models
-
+#Comentario de prueba si
 # Create your models here.
 
 # Tabla TBL_GENERO
