@@ -59,3 +59,47 @@ class GeneroView(View):
         else:
             datos={'message': 'Genero no encontrado'}
         return JsonResponse(datos)
+
+class UsuarioView(View):
+    
+        @method_decorator(csrf_exempt)
+        def dispatch(self, request, *args , **kwargs):
+            return super().dispatch(request, *args, **kwargs)
+
+        def get(self,request, id=0):
+            if(id>0):
+                usuario=list(Usuario.objects.filter(id=id).values())
+                if len(usuario)>0:
+                    usuarios=usuario[0]
+                    datos={'message': 'exito', 'usuarios':usuarios}
+                else:
+                    datos={'message': 'usuario no encontrado'}
+                return JsonResponse(datos)
+            else:
+                usuario= list(Usuario.objects.values())
+                if len(usuario)>0:
+                    datos={'message': 'exito', 'usuarios':usuario}
+                else:
+                    datos={'message': 'No se encontro usuarios'}
+            return JsonResponse(datos)
+
+        def post(self,request):
+            jd=json.loads(request.body)
+            print(jd)
+
+            genero = Genero.objects.get(id=jd['genero'])
+            newPersona = Persona.objects.create(
+            genero =genero,
+            nombre=jd['nombre'],
+            apellido=jd['apellido'],
+            fecha_nacimiento=jd['fecha_nacimiento'],
+            )
+            Usuario.objects.create(
+            persona =newPersona,
+            user=jd['user'],
+            correo=jd['correo'],
+            contrasena=jd['contrasena'],
+            fecha_registro=jd['fecha_registro']
+            )
+            datos={'message': 'Se creo el nuevo usuario'}
+            return JsonResponse(datos)
