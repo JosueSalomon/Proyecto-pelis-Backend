@@ -100,7 +100,7 @@ class UsuarioView(View):
             jd=json.loads(request.body)
             print(jd)
 
-            usuario = list(Usuario.objects.filter(correo=jd['correo'], contrasena=jd['contrasena']).values())
+            usuario = list(Usuario.objects.filter(correo=jd['correo']).values())
             if len(usuario)>0:
                 usuarios=usuario[0]
                 datos={'message': 'Usuario ya existente'}
