@@ -67,6 +67,8 @@ class UsuarioView(View):
             return super().dispatch(request, *args, **kwargs)
 
         def get(self,request, id=0):
+            if 'login' in request.path:
+                return self.login(request)
             if(id>0):
                 usuario=list(Usuario.objects.filter(id=id).values())
                 if len(usuario)>0:
@@ -81,6 +83,17 @@ class UsuarioView(View):
                     datos={'message': 'exito', 'usuarios':usuario}
                 else:
                     datos={'message': 'No se encontro usuarios'}
+            return JsonResponse(datos)
+
+        def login(self, request):
+            # Parsear los datos del request
+            jd = json.loads(request.body)
+            usuario = list(Usuario.objects.filter(correo=jd['correo'], contrasena=jd['contrasena']).values())
+            if len(usuario)>0:
+                usuarios=usuario[0]
+                datos={'message': 'Login exitoso', 'usuarios':usuarios}
+            else:
+                datos={'message': 'Credenciales Invalidas'}
             return JsonResponse(datos)
 
         def post(self,request):
