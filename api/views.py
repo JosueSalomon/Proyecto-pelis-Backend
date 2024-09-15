@@ -122,3 +122,17 @@ class UsuarioView(View):
                 datos={'message': 'Se creo el nuevo usuario'}
 
             return JsonResponse(datos)
+
+class PeliculaView(View):
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args , **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get(self,request):
+        peliculasRecientes = list(Pelicula.objects.order_by('-anio_estreno')[:16].values())
+        if len(peliculasRecientes)>0:
+            datos={'message': 'exito', 'peliculasRecientes':peliculasRecientes}
+        else:
+            datos={'message': 'No se encontro peliculasRecientes'}
+        return JsonResponse(datos)

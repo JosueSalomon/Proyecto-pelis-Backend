@@ -9,4 +9,7 @@ urlpatterns =[
     path('usuario/',UsuarioView.as_view(),name='usuario'),
     path('usuario/<int:id>',UsuarioView.as_view(),name='usuario_process'),
     path('usuario/login',UsuarioView.as_view(),name='usuario_login'),
+
+
+    path('home/',PeliculaView.as_view(),name='home'),
 ]
